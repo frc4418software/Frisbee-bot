@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Ultrasonic;
 
 /**
@@ -31,10 +33,10 @@ public class DriveSubsystem extends Subsystem {
   // API Objects
   // Motors and encoders and gyroscopes and stuff
   // Allocate memory to speed up instantiation later
-  private WPI_TalonSRX leftDriveMotor1;
-  private WPI_TalonSRX leftDriveMotor2;
-  private WPI_TalonSRX rightDriveMotor1;
-  private WPI_TalonSRX rightDriveMotor2;
+  private Talon leftDriveMotor1;
+  private Talon leftDriveMotor2;
+  private Talon rightDriveMotor1;
+  private Talon rightDriveMotor2;
   private RobotDrive robotDrive;
   
   private Encoder leftDriveEncoder;
@@ -49,16 +51,12 @@ public class DriveSubsystem extends Subsystem {
 
   private boolean arcadeDrive = false;
 
-
-
-
-
   //Instantiate the subsystem
   public DriveSubsystem() {
-    leftDriveMotor1 = new WPI_TalonSRX(RobotMap.DRIVE_LEFT_A_TALON_SRX_ID);
-    leftDriveMotor2 = new WPI_TalonSRX(RobotMap.DRIVE_LEFT_B_TALON_SRX_ID);
-    rightDriveMotor1 = new WPI_TalonSRX(RobotMap.DRIVE_RIGHT_A_TALON_SRX_ID);
-    rightDriveMotor2 = new WPI_TalonSRX(RobotMap.DRIVE_RIGHT_B_TALON_SRX_ID);
+    leftDriveMotor1 = new Talon(RobotMap.DRIVE_LEFT_A_TALON_SRX_ID);
+    leftDriveMotor2 = new Talon(RobotMap.DRIVE_LEFT_B_TALON_SRX_ID);
+    rightDriveMotor1 = new Talon(RobotMap.DRIVE_RIGHT_A_TALON_SRX_ID);
+    rightDriveMotor2 = new Talon(RobotMap.DRIVE_RIGHT_B_TALON_SRX_ID);
     robotDrive = new RobotDrive(leftDriveMotor1, leftDriveMotor2, rightDriveMotor1, rightDriveMotor2);
 
     leftDriveEncoder = new Encoder(RobotMap.DRIVE_LEFT_ENCODER_CHANNELA_ID, RobotMap.DRIVE_LEFT_ENCODER_CHANNELB_ID);
@@ -68,7 +66,7 @@ public class DriveSubsystem extends Subsystem {
     frontDriveDistance = new Ultrasonic(RobotMap.DRIVE_FRONT_DISTANCE_PING_ID, RobotMap.DRIVE_FRONT_DISTANCE_ECHO_ID);
     backDriveDistance = new Ultrasonic(RobotMap.DRIVE_BACK_DISTANCE_PING_ID, RobotMap.DRIVE_BACK_DISTANCE_ECHO_ID);
 
-    leftDriveMotor2.follow(leftDriveMotor1);
+    (leftDriveMotor2).follow(leftDriveMotor1);
     rightDriveMotor2.follow(rightDriveMotor1);
 
     setLeftBrakemode(false);
