@@ -9,7 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_Talon;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleopDriveCommand;
@@ -31,10 +31,8 @@ public class DriveSubsystem extends Subsystem {
   // API Objects
   // Motors and encoders and gyroscopes and stuff
   // Allocate memory to speed up instantiation later
-  private WPI_Talon leftDriveMotor1;
-  private WPI_Talon leftDriveMotor2;
-  private WPI_Talon rightDriveMotor1;
-  private WPI_Talon rightDriveMotor2;
+  private WPI_TalonSRX leftDriveMotor1;
+  private WPI_TalonSRX leftDriveMotor2;
   private RobotDrive robotDrive;
   
   private Encoder leftDriveEncoder;
@@ -55,10 +53,10 @@ public class DriveSubsystem extends Subsystem {
 
   //Instantiate the subsystem
   public DriveSubsystem() {
-    leftDriveMotor1 = new WPI_Talon(RobotMap.DRIVE_LEFT_A_TALON_SRX_ID);
-    leftDriveMotor2 = new WPI_Talon(RobotMap.DRIVE_LEFT_B_TALON_SRX_ID);
-    rightDriveMotor1 = new WPI_Talon(RobotMap.DRIVE_RIGHT_A_TALON_SRX_ID);
-    rightDriveMotor2 = new WPI_Talon(RobotMap.DRIVE_RIGHT_B_TALON_SRX_ID);
+    leftDriveMotor1 = new WPI_TalonSRX(RobotMap.DRIVE_LEFT_A_TALON_SRX_ID);
+    leftDriveMotor2 = new WPI_TalonSRX(RobotMap.DRIVE_LEFT_B_TALON_SRX_ID);
+    rightDriveMotor1 = new WPI_TalonSRX(RobotMap.DRIVE_RIGHT_A_TALON_SRX_ID);
+    rightDriveMotor2 = new WPI_TalonSRX(RobotMap.DRIVE_RIGHT_B_TALON_SRX_ID);
     robotDrive = new RobotDrive(leftDriveMotor1, leftDriveMotor2, rightDriveMotor1, rightDriveMotor2);
 
     leftDriveEncoder = new Encoder(RobotMap.DRIVE_LEFT_ENCODER_CHANNELA_ID, RobotMap.DRIVE_LEFT_ENCODER_CHANNELB_ID);
