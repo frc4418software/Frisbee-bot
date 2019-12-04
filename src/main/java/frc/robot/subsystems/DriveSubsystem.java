@@ -85,10 +85,6 @@ public class DriveSubsystem extends Subsystem {
     backDriveDistance.setEnabled(true);
   }
 
-  public TestMethod() {
-    
-  }
-
 
 
 
