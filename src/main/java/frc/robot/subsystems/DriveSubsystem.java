@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.IFollower;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -66,11 +67,9 @@ public class DriveSubsystem extends Subsystem {
     frontDriveDistance = new Ultrasonic(RobotMap.DRIVE_FRONT_DISTANCE_PING_ID, RobotMap.DRIVE_FRONT_DISTANCE_ECHO_ID);
     backDriveDistance = new Ultrasonic(RobotMap.DRIVE_BACK_DISTANCE_PING_ID, RobotMap.DRIVE_BACK_DISTANCE_ECHO_ID);
 
-    (leftDriveMotor2).follow(leftDriveMotor1);
-    rightDriveMotor2.follow(rightDriveMotor1);
+    leftDriveMotor2.set(leftDriveMotor1.getSpeed());
+    rightDriveMotor2.set(rightDriveMotor1.getSpeed());
 
-    setLeftBrakemode(false);
-    setRightBrakemode(false);
 
     driveGyro.initGyro();
     driveGyro.calibrate();
@@ -92,67 +91,23 @@ public class DriveSubsystem extends Subsystem {
 
   //control left motor
   public void setLeftMotorValue(double motorValue){
-    leftDriveMotor1.set(ControlMode.PercentOutput, motorValue);
+    leftDriveMotor1.set(motorValue);
   }
 
   //control right motor
   public void setRightMotorValue(double motorValue){
-    rightDriveMotor1.set(ControlMode.PercentOutput, motorValue);
+    rightDriveMotor1.set(motorValue);
   }
 
   //read left motor
   public double getLeftDriveValue(){
-    return leftDriveMotor1.getMotorOutputPercent();
+    return leftDriveMotor1.getSpeed();
   }
 
   //read right motor
   public double getRightDriveValue(){
-    return rightDriveMotor1.getMotorOutputPercent();
+    return rightDriveMotor1.getSpeed();
   }
-
-  // set the left breaks to break or coast
-  public void setLeftBrakemode(boolean isBraking) {
-    // when true, set to breaking mode
-    if(isBraking) {
-      leftDriveMotor1.setNeutralMode(NeutralMode.Brake);
-      leftDriveMotor2.setNeutralMode(NeutralMode.Brake);
-    } else { // else set to coast
-      leftDriveMotor1.setNeutralMode(NeutralMode.Coast);
-      leftDriveMotor2.setNeutralMode(NeutralMode.Coast);
-    }
-  }
-
-  // set the right breaks to break or coast
-  public void setRightBrakemode(boolean isBraking) {
-    // when true, set to breaking mode
-    if(isBraking) {
-      rightDriveMotor1.setNeutralMode(NeutralMode.Brake);
-      rightDriveMotor2.setNeutralMode(NeutralMode.Brake);
-    } else { // else set to coast
-      rightDriveMotor1.setNeutralMode(NeutralMode.Coast);
-      rightDriveMotor2.setNeutralMode(NeutralMode.Coast);
-    }
-  }
-
-  // Automatically set the breaks on when the robot is not moving
-  // and disable them when the robot is moving
-  public void autoBreakTankDrive(double[] values) {
-    // if the input is 0, set break, else don't
-    if(values[0] == 0) {
-      setLeftBrakemode(true);
-    } else {
-      setLeftBrakemode(false);
-    }
-
-    if(values[1] == 0) {
-      setRightBrakemode(true);
-    } else {
-      setRightBrakemode(false);
-    }
-  }
-
-
-
 
 
   // Control code for the motors
@@ -189,8 +144,8 @@ public class DriveSubsystem extends Subsystem {
 
   // stop driving
   public void stopDrive(){
-    leftDriveMotor1.set(ControlMode.PercentOutput, 0);
-    rightDriveMotor1.set(ControlMode.PercentOutput, 0);
+    leftDriveMotor1.set(0);
+    rightDriveMotor1.set(0);
   }
 
   // a wrapper around tank drive that sets stuff up to be better optimized for teleop controll
@@ -204,8 +159,6 @@ public class DriveSubsystem extends Subsystem {
     dip.magnetizeTankDrive();
     dip.applyDeadzones();
     values = dip.getValues();
-
-    autoBreakTankDrive(values);
 
     // use the modified arrays to drive the robot
     tankDrive(values);
@@ -223,8 +176,7 @@ public class DriveSubsystem extends Subsystem {
     dip.inputMapWrapper(DriveInputPipeline.InputMapModes.IMM_CUBE, DriveInputPipeline.InputMapModes.IMM_CUBE);
     dip.applyDeadzones();
     values = dip.getValues();
-    
-    autoBreakTankDrive(dip.convertArcadeDriveToTank(values));
+  
 
     // use the modified arrays to drive the robot
     arcadeDrive(values);
